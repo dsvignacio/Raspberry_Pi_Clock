@@ -1,4 +1,5 @@
-setInterval(setClock, 1000)
+// Assign the interval to a variable so it can be cleared for testing
+const clockInterval = setInterval(setClock, 1000)
 
 const secondHand = document.querySelector('[data-second-hand]')
 const minuteHand = document.querySelector('[data-minute-hand]')
@@ -13,7 +14,7 @@ function setClock(){
   let currentHour = currentDate.getHours();             // 0 - 23
   let currentDay = currentDate.getDay();                // 0 - 6
   let currentDateInMonth = currentDate.getDate();       // 1 - 31
-  let currentMonth = currentDate.getUTCMonth();         // 0 - 11
+  let currentMonth = currentDate.getMonth();         // 0 - 11
   let currentYear = currentDate.getFullYear();          // YYYY
 
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
