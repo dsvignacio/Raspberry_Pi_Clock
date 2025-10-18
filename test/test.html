@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Test</title>
+</head>
+
+<body>
+  <div id="DigitalClock" class="clock">
+    <div id="time"></div>
+    <div id="date"></div>
+  </div>
+
+  <div id="test-result"></div>
+
+  <!-- The script from the main app is included here for testing -->
+  <script src="../js/main.js"></script>
+
+  <script>
+    // This script runs the test
+    function runTest() {
+      // Clear the interval from main.js to prevent it from interfering with the test
+      clearInterval(window.intervalID);
+
+      // Mock the Date object to a specific time that caused the bug
+      const OriginalDate = Date;
+      // This time is April 1st, 2 AM in UTC.
+      const mockDate = new OriginalDate('2024-04-01T02:00:00Z');
+
+      // We simulate a timezone that is 5 hours behind UTC.
+      // In this timezone, the local date is March 31st.
+      const localMockDate = new OriginalDate(mockDate.getTime() - 5 * 60 * 60 * 1000);
+
+      window.Date = class extends OriginalDate {
+        constructor(dateString) {
+          if (dateString) {
+            return new OriginalDate(dateString);
+          }
+          return localMockDate;
+        }
+        static now() {
+          return localMockDate.getTime();
+        }
+      };
+
+      // Re-run setClock to apply the mocked date
+      setClock();
+
+      // Check the result
+      const dateElement = document.getElementById('date');
+      const dateText = dateElement.innerText;
+      const testResult = document.getElementById('test-result');
+
+      // The original bug (using getUTCMonth()) would show "Apr".
+      // The fix (using getMonth()) should show "Mar".
+      if (dateText.includes("Mar")) {
+        testResult.innerText = "Test Passed: Month is March (correct)";
+        testResult.style.color = "green";
+      } else {
+        testResult.innerText = "Test Failed: Month is not March. Actual: " + dateText;
+        testResult.style.color = "red";
+      }
+    }
+
+    // Assign the interval ID to the window object so we can clear it in the test
+    const originalSetInterval = window.setInterval;
+    window.setInterval = function(callback, delay) {
+      window.intervalID = originalSetInterval(callback, delay);
+      return window.intervalID;
+    };
+
+    // Run the test after the page loads
+    window.onload = runTest;
+  </script>
+
+</body>
+</html>
