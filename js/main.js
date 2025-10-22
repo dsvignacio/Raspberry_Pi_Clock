@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This script handles the functionality for an analog and digital clock,
+ * including a fullscreen toggle button.
+ */
+
 // Assign the interval to a variable so it can be cleared for testing
 const clockInterval = setInterval(setClock, 1000)
 
@@ -6,6 +11,12 @@ const minuteHand = document.querySelector('[data-minute-hand]')
 const hourHand = document.querySelector('[data-hour-hand]')
 const elem = document.documentElement;
 
+/**
+ * Updates both the analog and digital clocks to the current time.
+ * This function is called every second to update the clock faces.
+ * It calculates the rotation for the analog clock hands and formats the
+ * time and date for the digital display.
+ */
 function setClock(){
   const currentDate = new Date()
 
@@ -52,8 +63,29 @@ function setClock(){
   setRotation({element: hourHand, rotationRatio: hoursRatio})
 }
 
+/**
+ * Sets the rotation of a clock hand element.
+ * @param {object} params - The parameters for setting rotation.
+ * @param {HTMLElement} params.element - The clock hand element to rotate.
+ * @param {number} params.rotationRatio - The rotation ratio (from 0 to 1).
+ */
 function setRotation({element, rotationRatio}){
   element.style.setProperty('--rotation', rotationRatio * 360)
+}
+
+/**
+ * Handles the UI changes when entering or exiting fullscreen mode.
+ * It toggles a class on the button and updates its ARIA label.
+ */
+function handleFullscreen() {
+    const toggleBtn = document.querySelector('.js-toggle-fullscreen-btn');
+    if(document.fullscreenElement != null) {
+        toggleBtn.classList.add('on');
+        toggleBtn.setAttribute('aria-label', 'Exit fullscreen mode');
+    } else {
+        toggleBtn.classList.remove('on');
+        toggleBtn.setAttribute('aria-label', 'Enter fullscreen mode');
+    }
 }
 
 // ###########################################################
@@ -81,17 +113,6 @@ if(document.fullscreenEnabled) {
 
 	document.addEventListener('fullscreenchange', handleFullscreen);
 	document.addEventListener('webkitfullscreenchange', handleFullscreen);
-
-
-	function handleFullscreen() {
-		if(document.fullscreenElement != null) {
-			toggleBtn.classList.add('on');
-			toggleBtn.setAttribute('aria-label', 'Exit fullscreen mode');
-		} else {
-			toggleBtn.classList.remove('on');
-			toggleBtn.setAttribute('aria-label', 'Enter fullscreen mode');
-		}
-	}
 }
 
 setClock()

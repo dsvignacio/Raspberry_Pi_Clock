@@ -265,6 +265,10 @@ textarea {
    CLOCK CSS
    ============================================================ */
 
+/**
+ * Custom properties (variables) for the clock's color scheme.
+ * This makes it easy to customize the look and feel of the clock.
+ */
 :root{
   --color-background: #1F2041;
   --color-clk-bg: #4B3F72;
@@ -291,6 +295,10 @@ body{
   font-family: UbuntuMono-Regular;
 }
 
+/**
+ * Styles for the analog clock container.
+ * This creates the main circular clock face.
+ */
 .AnalogClock{
   width: 300px;
   height: 300px;
@@ -369,6 +377,9 @@ body{
   background-color: var(--color-hour-min);
 }
 
+/**
+ * Styles for the digital clock container.
+ */
 #DigitalClock{
   color: var(--color-all-text);
   padding-left: 3%;
@@ -389,6 +400,10 @@ body{
     FULLSCREEN BUTTON
    ========================================================== */
 
+/**
+ * Styles for the fullscreen toggle button.
+ * This button is fixed to the top right of the screen.
+ */
 .toggle-fullscreen-btn {
 	position: fixed;
 	z-index: 10000;
